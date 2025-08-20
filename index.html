@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Book Recommender</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            input, button { margin: 5px 0; padding: 8px; width: 300px; }
+            pre { background: #f4f4f4; padding: 10px; border-radius: 5px; max-height: 300px; overflow: auto; }
+            section { margin-bottom: 40px; }
+        </style>
+    </head>
+    <body>
+        <h1>Book Recommender</h1>
+
+        <section>
+            <h2>Recommend a book</h2>
+            <label>Entry Book:</label><br>
+            <input type="text" id="entry_book" placeholder="Book name" /><br>
+            <label>Entry Author:</label><br>
+            <input type="text" id="entry_author" placeholder="Author name" /><br>
+            <label>Number of Results:</label><br>
+            <input type="number" id="num_of_results" value="10" min="1" max="50" /><br>
+            <button onclick="callRecommend()">Recommend Books</button>
+            <pre id="recommend_result"></pre>
+        </section>
+
+        <section>
+            <h2>List books</h2>
+            <label>Page:</label><br>
+            <input type="number" id="books_page" value="1" min="1" /><br>
+            <label>Page Size:</label><br>
+            <input type="number" id="books_page_size" value="10" min="1" max="50" /><br>
+            <button onclick="callBooks()">List Books</button>
+            <pre id="books_result"></pre>
+        </section>
+
+        <section>
+            <h2>List authors</h2>
+            <label>Page:</label><br>
+            <input type="number" id="authors_page" value="1" min="1" /><br>
+            <label>Page Size:</label><br>
+            <input type="number" id="authors_page_size" value="10" min="1" max="50" /><br>
+            <button onclick="callAuthors()">List Authors</button>
+            <pre id="authors_result"></pre>
+        </section>
+
+        <script>
+            async function callRecommend() {
+                const book = document.getElementById('entry_book').value;
+                const author = document.getElementById('entry_author').value;
+                const num = document.getElementById('num_of_results').value;
+                if (!book || !author) {
+                    alert('Please enter both book and author.');
+                    return;
+                }
+                const url = `/book_recommend?entry_book=${encodeURIComponent(book)}&entry_author=${encodeURIComponent(author)}&num_of_results=${encodeURIComponent(num)}`;
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) {
+                        const error = await res.json();
+                        document.getElementById('recommend_result').textContent = 'Error: ' + (error.detail || res.statusText);
+                        return;
+                    }
+                    const data = await res.json();
+                    document.getElementById('recommend_result').textContent = JSON.stringify(data, null, 2);
+                } catch(e) {
+                    document.getElementById('recommend_result').textContent = 'Fetch error: ' + e.message;
+                }
+            }
+
+            async function callBooks() {
+                const page = document.getElementById('books_page').value;
+                const pageSize = document.getElementById('books_page_size').value;
+                const url = `/books?page=${encodeURIComponent(page)}&page_size=${encodeURIComponent(pageSize)}`;
+                try {
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    document.getElementById('books_result').textContent = JSON.stringify(data, null, 2);
+                } catch(e) {
+                    document.getElementById('books_result').textContent = 'Fetch error: ' + e.message;
+                }
+            }
+
+            async function callAuthors() {
+                const page = document.getElementById('authors_page').value;
+                const pageSize = document.getElementById('authors_page_size').value;
+                const url = `/authors?page=${encodeURIComponent(page)}&page_size=${encodeURIComponent(pageSize)}`;
+                try {
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    document.getElementById('authors_result').textContent = JSON.stringify(data, null, 2);
+                } catch(e) {
+                    document.getElementById('authors_result').textContent = 'Fetch error: ' + e.message;
+                }
+            }
+        </script>
+    </body>
+    </html>

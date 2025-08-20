@@ -1,2 +1,8 @@
 venv
+env_final
 *.csv
+datasets
+datasets_save
+kaggle_secrets.json
+__pycache__
+.vscode
