@@ -17,9 +17,9 @@ good stuff: expressive naming, nice comments, flat tree - not too many nests
 ## Architecture
 
 ### ETL module 
-- download from api / scrape
-- clean, transform
-- store cleaned as pickle
+- download from kaggle api / scrape sharepoint with selenium
+- clean, transform: empty and incorrect values, useless columns
+- store cleaned data as pickle: faster loadup
 
 ### Recommendation algo
 - loads dataset into memory
@@ -41,14 +41,16 @@ good stuff: expressive naming, nice comments, flat tree - not too many nests
 - pandas (data handling)
 
 ## Possible future improvements
-- multiple books/authors on input?
-- maybe store the correlation matrix somewhere? cache results?
-- pickle dataset? faster startup, flag on new data
 - api behind oauth
 - retry on download
-- rate limiting
-- store to some sort of DB
-- endpoint for data update / upload
+- rate limiting on api
+- store processed to DB
+- internal endpoint for running ETL process
 - pydantic schema for api response formats
 - refactor to spark
 - logging to better handle debug
+- endpoint for worst books from engine
+- timestamps for data download, data process etc.
+- tests to check api is working
+- multiple books/authors on input
+- maybe store the correlation matrix somewhere - cache results

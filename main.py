@@ -4,7 +4,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from book_rec import list_authors, list_books, load_dataset, recommend
+from recommender import list_authors, list_books, load_dataset, recommend
 
 app = FastAPI()
 app.state.dataset = load_dataset()  # keep one copy in memory - readOnly
@@ -22,17 +22,17 @@ def paginate(items: list[Any], page: int, page_size: int):
     }
 
 @app.get("/recommend")
-def recommend_books(entry_book: str, entry_author: str, num_of_results: int = 10):  # pyright: ignore[reportUnknownParameterType]
+def recommend_books(entry_book: str, entry_author: str, num_of_results: int = 10):
     entry_book = entry_book.lower()
     entry_author = entry_author.lower()
     try:
-        result = recommend(app.state.dataset, entry_book, entry_author)
+        result = recommend(app.state.dataset, entry_book, entry_author, num_of_results)
     except KeyError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-    return result[0:num_of_results]   # pyright: ignore[reportIndexIssue, reportUnknownVariableType]
+    return result
     
 @app.get("/books")
 def list_books_api(page: int = Query(1, ge=1), page_size: int = Query(10, ge=1, le=50)):  # pyright: ignore[reportCallInDefaultInitializer]
