@@ -65,3 +65,15 @@ def validate_isbn(isbn):
 print(df['ISBN'].apply(lambda x: validate_isbn(x)))
 
 print(df['Book-Rating'].unique())
+
+
+
+df = pd.read_csv('datasets/Books.csv')
+
+def fix_mojibake(s):
+    try:
+        return s.encode("latin1").decode("utf-8")
+    except:
+        return s
+
+df['Book-Title'] = df['Book-Title'].apply(fix_mojibake)

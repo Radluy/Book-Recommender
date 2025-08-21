@@ -1,10 +1,11 @@
-from pathlib import Path
-import os
 import json
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
+import os
+from pathlib import Path
 from zipfile import ZipFile
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
 
 DATASET_NAME = "arashnic/book-recommendation-dataset"
@@ -14,21 +15,20 @@ SHAREPOINT_URL = "https://datasentics.sharepoint.com/:u:/s/EXTDataEngineerTask/E
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 
+def setup_kaggle():
+    # Set kaggle api key as env variables.
+    if not KAGGLE_SECRET_PATH.exists():
+        raise FileNotFoundError(f"File with kaggle api key not found at: \"{str(KAGGLE_SECRET_PATH)}\"")
 
-# Set kaggle api key as env variables.
-if not KAGGLE_SECRET_PATH.exists():
-    raise FileNotFoundError(f"File with kaggle api key not found at: \"{str(KAGGLE_SECRET_PATH)}\"")
+    with KAGGLE_SECRET_PATH.open() as f:
+        secret = json.load(f)
+    os.environ['KAGGLE_USERNAME'] = secret['username']
+    os.environ['KAGGLE_KEY'] = secret['key']
 
-with KAGGLE_SECRET_PATH.open() as f:
-    secret = json.load(f)
-os.environ['KAGGLE_USERNAME'] = secret['username']
-os.environ['KAGGLE_KEY'] = secret['key']
-
-import kaggle
-
-
-def get_kaggle_connection() -> kaggle.KaggleApi:
+def get_kaggle_connection():
     """Init Kaggle Api connection and authenticate."""
+    setup_kaggle()
+    import kaggle
     api = kaggle.KaggleApi()
     api.authenticate()
     return api

@@ -53,7 +53,7 @@
                     alert('Please enter both book and author.');
                     return;
                 }
-                const url = `/book_recommend?entry_book=${encodeURIComponent(book)}&entry_author=${encodeURIComponent(author)}&num_of_results=${encodeURIComponent(num)}`;
+                const url = `/recommend?entry_book=${encodeURIComponent(book)}&entry_author=${encodeURIComponent(author)}&num_of_results=${encodeURIComponent(num)}`;
                 try {
                     const res = await fetch(url);
                     if (!res.ok) {

@@ -1,8 +1,10 @@
 from collections.abc import Iterator
-from typing import Any
-import pandas as pd
-import numpy as np
 from pathlib import Path
+from typing import Any
+
+import numpy as np
+import pandas as pd
+
 from download import download_data
 
 DATASETS_DIR = Path(__file__).parent / "datasets"
@@ -24,8 +26,16 @@ def validate_isbn(isbn) -> bool:
         sum += int(char) * (10 - idx)
     return sum % 11 == 0
 
+def fix_encoding(s):
+    try:
+        return s.encode("latin1").decode("utf-8")
+    except:
+        return s
+
 def clean_books_data(raw_dataset: pd.DataFrame) -> pd.DataFrame:
+    """Cleans data from books dataset. Removes empty or incorrect values."""
     dataset = raw_dataset.apply(lambda x: x.str.lower() if (x.dtype == 'object') else x)
+    dataset['Book-Title'] = dataset['Book-Title'].apply(fix_encoding)
     dataset = dataset.drop_duplicates('Book-Title')
     dataset = dataset[~dataset['Book-Author'].isna() | dataset['Book-Title'].isna() | dataset['ISBN'].isna()]
     # remove unnecessary columns
@@ -40,6 +50,7 @@ def clean_books_data(raw_dataset: pd.DataFrame) -> pd.DataFrame:
     return dataset
 
 def clean_ratings_data(raw_dataset: pd.DataFrame) -> pd.DataFrame:
+    """Cleans data from the ratings dataset. Removes empty or incorrect values."""
     # multiple ratings of one person for the same book
     dataset = raw_dataset.drop_duplicates(['ISBN', 'User-ID'])
     # implicit value
@@ -58,7 +69,7 @@ def load_dataset(from_scratch=False) -> pd.DataFrame:
         return dataset
 
     # load ratings
-    if not DATASETS_DIR.exists() or any(DATASETS_DIR.iterdir()):
+    if not DATASETS_DIR.exists() or not any(DATASETS_DIR.iterdir()):
         download_data()
     ratings: pd.DataFrame = pd.read_csv(RATINGS_DATA, encoding='utf-8', sep=',')
     ratings = clean_ratings_data(ratings)
