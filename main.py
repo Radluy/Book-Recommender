@@ -4,7 +4,8 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from recommender import list_authors, list_books, load_dataset, recommend
+from recommender import list_authors, list_books, recommend
+from etl import load_dataset
 
 app = FastAPI()
 app.state.dataset = load_dataset()  # keep one copy in memory - readOnly

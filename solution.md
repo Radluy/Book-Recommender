@@ -52,5 +52,7 @@ good stuff: expressive naming, nice comments, flat tree - not too many nests
 - endpoint for worst books from engine
 - timestamps for data download, data process etc.
 - tests to check api is working
+- real configfile
+- specific kaggle account for this image
 - multiple books/authors on input
 - maybe store the correlation matrix somewhere - cache results

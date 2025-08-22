@@ -59,11 +59,11 @@ def load_dataset(from_scratch=False) -> pd.DataFrame:
     # load ratings
     if not DATASETS_DIR.exists() or not any(DATASETS_DIR.iterdir()):
         download_data()
-    ratings: pd.DataFrame = pd.read_csv(RATINGS_DATA, encoding='utf-8', sep=',')
+    ratings: pd.DataFrame = pd.read_csv(RATINGS_DATA, encoding='utf-8', sep=',', low_memory=False)
     ratings = clean_ratings_data(ratings)
 
     # load books
-    books: pd.DataFrame = pd.read_csv(BOOKS_DATA, encoding='utf-8', sep=',', on_bad_lines='skip')
+    books: pd.DataFrame = pd.read_csv(BOOKS_DATA, encoding='utf-8', sep=',', on_bad_lines='skip', low_memory=False)
     books = clean_books_data(books)
 
 
