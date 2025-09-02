@@ -22,7 +22,7 @@ def paginate(items: list[Any], page: int, page_size: int):
         "items": items[start:end]
     }
 
-@app.get("/recommend")
+@app.get("/recommend", response_class=JSONResponse)
 def recommend_books(entry_book: str, entry_author: str, num_of_results: int = 10):
     entry_book = entry_book.lower()
     entry_author = entry_author.lower()

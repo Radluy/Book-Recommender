@@ -11,7 +11,6 @@
 
 encoding as cp1251 - weird values no matter the encoding
 
-
 good stuff: expressive naming, nice comments, flat tree - not too many nests
 
 ## Architecture
@@ -54,5 +53,6 @@ good stuff: expressive naming, nice comments, flat tree - not too many nests
 - tests to check api is working
 - real configfile
 - specific kaggle account for this image
+- databricks / airflow project for better orchestration 
 - multiple books/authors on input
 - maybe store the correlation matrix somewhere - cache results

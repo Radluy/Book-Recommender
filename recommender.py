@@ -108,5 +108,7 @@ def recommend(dataset: pd.DataFrame, input_book: str = INPUT_BOOK, input_author:
 
 
 if __name__ == '__main__':
+    from etl import load_dataset
     dataset = load_dataset(True)
-    recommend(dataset)
+    recommendation = recommend(dataset, INPUT_BOOK, INPUT_AUTHOR)
+    print(recommendation)

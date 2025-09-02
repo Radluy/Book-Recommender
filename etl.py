@@ -35,6 +35,7 @@ def clean_books_data(raw_dataset: pd.DataFrame) -> pd.DataFrame:
     # if the last digit is X, it represents a 10
     dataset = dataset[dataset["ISBN"].astype(str).str.fullmatch(r"[0-9X]+")]
     dataset = dataset[dataset['ISBN'].apply(lambda x: validate_isbn(x))]
+    
     return dataset
 
 def clean_ratings_data(raw_dataset: pd.DataFrame) -> pd.DataFrame:
@@ -47,8 +48,8 @@ def clean_ratings_data(raw_dataset: pd.DataFrame) -> pd.DataFrame:
     # weird ISBN found - must be digits or 'x'
     dataset = dataset[dataset["ISBN"].astype(str).str.fullmatch(r"[0-9X]+")]
     dataset = dataset[dataset['ISBN'].apply(lambda x: validate_isbn(x))]
-    return dataset
 
+    return dataset
 
 def load_dataset(from_scratch=False) -> pd.DataFrame:
     """Loads data either from stored pickle or from raw csv files"""
